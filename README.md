@@ -1,0 +1,1 @@
+<blockquote align="center">“Don't wait to plant, only have patience to harvest”!</blockquote>
