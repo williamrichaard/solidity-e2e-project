@@ -1,1 +1,3 @@
-<blockquote align="center">“Don't wait to plant, only have patience to harvest”!</blockquote>
+<h3 align="center">
+  Challenge TheChaincademy: Branching and Merging
+</h3>
