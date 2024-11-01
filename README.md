@@ -108,7 +108,7 @@ For a more detailed explanation of smart contracts, check out this [video on Sma
 ## Visual Representation
 Here is a visual representation of how the Ethereum blockchain works:
 
-![Ethereum Blockchain Diagram](https://example.com/ethereum-blockchain-diagram.png)
+![Ethereum Blockchain](https://example.com/ethereum-blockchain.png)
 
 > **Video Explanation:** For a more detailed visual explanation, watch this [video on How Ethereum Works](https://www.youtube.com/watch?v=TDGq4aeevgY).
 
