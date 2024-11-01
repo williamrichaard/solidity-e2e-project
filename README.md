@@ -1,36 +1,17 @@
 # Blockchain Overview
 
 ## Table of Contents
-- [Blockchain Overview](#blockchain-overview)
-  - [Table of Contents](#table-of-contents)
-  - [Introduction](#introduction)
-  - [Key Concepts](#key-concepts)
-    - [1. Public Database](#1-public-database)
-    - [2. Trustless System](#2-trustless-system)
-    - [3. Blockchain](#3-blockchain)
-    - [4. State Machine](#4-state-machine)
-    - [5. Blocks](#5-blocks)
-    - [6. Mining](#6-mining)
-    - [7. Proof of Work (PoW)](#7-proof-of-work-pow)
-    - [8. Decentralization](#8-decentralization)
-    - [9. Single Chain](#9-single-chain)
-    - [10. GHOST Protocol](#10-ghost-protocol)
-    - [11. Smart Contracts](#11-smart-contracts)
-    - [12. Consensus Mechanisms](#12-consensus-mechanisms)
-    - [13. Forks](#13-forks)
-    - [14. Nodes](#14-nodes)
-    - [15. Cryptography](#15-cryptography)
-    - [16. Immutability](#16-immutability)
-    - [17. Tokenization](#17-tokenization)
-  - [Visual Representation](#visual-representation)
-  - [External Resources](#external-resources)
-    - [Conclusion](#conclusion)
+- [Introduction](#introduction)
+- [Key Concepts](#key-concepts)
+- [Visual Representation](#visual-representation)
+- [External Resources](#external-resources)
+- [Conclusion](#conclusion)
 
 ---
 
 ## Introduction
 
-Blockchain is a decentralized technology that allows for the secure and immutable recording of digital transactions. While it is the foundation of many cryptocurrencies like Bitcoin and Ethereum, its applications extend far beyond the financial sector. Blockchain can track assets, manage smart contracts, and create more transparent voting systems.
+Blockchain is a decentralized technology that enables the secure and immutable recording of digital transactions. While it is the foundation for many cryptocurrencies, such as Bitcoin and Ethereum, its applications extend far beyond the financial sector. Blockchain can track assets, manage smart contracts, and create more transparent voting systems.
 
 This document summarizes the key concepts of blockchain technology, focusing on how it works and its various applications.
 
@@ -63,10 +44,10 @@ Most blockchains, like Bitcoin, use a consensus mechanism called **Proof of Work
 **Decentralization** is one of the pillars of blockchain. Unlike centralized systems, where one entity controls the data, blockchain data is distributed across multiple nodes, making the system more resilient to failures and attacks.
 
 ### 9. Single Chain
-Blockchain follows a **single chain** of blocks, meaning only one chain is considered valid. This is ensured by consensus protocols like the **GHOST protocol**, which selects the longest chain (the one with the most computational work) as the valid one.
+Blockchain follows a **single chain** of blocks, meaning only one chain is considered valid. This is ensured by consensus protocols like the **GHOST Protocol**, which selects the longest chain (the one with the most computational work) as the valid one.
 
 ### 10. GHOST Protocol
-The **GHOST protocol** (Greedy Heaviest Observed Subtree) ensures that the longest chain, or the chain with the most computational work, is considered the valid chain. This helps prevent forks and ensures network security.
+The **GHOST Protocol** (Greedy Heaviest Observed Subtree) ensures that the longest chain, or the chain with the most computational work, is considered the valid chain. This helps prevent forks and ensures network security.
 
 ### 11. Smart Contracts
 **Smart contracts** are self-executing contracts with the terms of the agreement directly written into code. They automatically enforce and execute the terms of a contract when predefined conditions are met, without the need for intermediaries.
@@ -116,5 +97,5 @@ Bitcoin Whitepaper
 
 ---
 
-### Conclusion
+## Conclusion
 Blockchain is a powerful technology that enables the creation of decentralized, secure, and transparent systems. Its ability to record transactions in an immutable and verifiable way makes it a fundamental piece for the future of decentralized internet and many other applications beyond cryptocurrencies.
