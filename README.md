@@ -1,5 +1,7 @@
 # Blockchain Overview
 
+![Ethereum Logo](https://upload.wikimedia.org/wikipedia/commons/6/6f/Ethereum-icon-purple.svg)
+
 ## Table of Contents
 - [Introduction](#introduction)
 - [Key Concepts](#key-concepts)
@@ -86,8 +88,8 @@ Here is a simplified visual representation of how blockchain works:
 For more information, visit the following resources:
 
 - [
-Wikipedia page on Blockchain
-](https://en.wikipedia.org/wiki/Blockchain)
+Introduction to Decentralized technology Blockchain
+](https://www.youtube.com/watch?v=nHy06xrlb3Q&t=2288s)
 - [
 Ethereum Whitepaper
 ](https://ethereum.org/en/whitepaper/)
