@@ -108,7 +108,7 @@ For a more detailed explanation of smart contracts, check out this [video on Sma
 ## Visual Representation
 Here is a visual representation of how the Ethereum blockchain works:
 
-![Ethereum Blockchain](https://example.com/ethereum-blockchain.png)
+![Ethereum Blockchain Diagram](https://example.com/ethereum-blockchain-diagram.png)
 
 > **Video Explanation:** For a more detailed visual explanation, watch this [video on How Ethereum Works](https://www.youtube.com/watch?v=TDGq4aeevgY).
 
@@ -124,4 +124,3 @@ Here is a visual representation of how the Ethereum blockchain works:
 
 ## Conclusion
 Ethereum is a powerful decentralized platform that enables peer-to-peer transactions and the execution of smart contracts. Its blockchain is secure, transparent, and immutable, making it a revolutionary technology in the world of finance and beyond. By understanding the key concepts such as mining, proof of work, smart contracts, and the GHOST protocol, you can gain a deeper appreciation for how Ethereum operates and why it is considered one of the most important blockchain platforms today.
-
