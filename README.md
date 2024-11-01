@@ -1,7 +1,5 @@
 # Blockchain Overview
 
-![Blockchain Logo](https://en.m.wikipedia.org/wiki/File:Bitcoin.png)
-
 ## Introduction
 
 Blockchain is a decentralized technology that allows for the secure and immutable recording of digital transactions. While it is the foundation of many cryptocurrencies like Bitcoin and Ethereum, its applications extend far beyond the financial sector. Blockchain can be used to track assets, manage smart contracts, and even create more transparent voting systems.
@@ -92,6 +90,5 @@ Here is a simplified visual representation of how blockchain works:
 | Transactions   |     | Transactions   |     | Transactions   |
 +----------------+     +----------------+     +----------------+
 ```
-
 ### Conclusion
 Blockchain is a powerful technology that enables the creation of decentralized, secure, and transparent systems. Its ability to record transactions in an immutable and verifiable way makes it a fundamental piece for the future of decentralized internet and many other applications beyond cryptocurrencies.
