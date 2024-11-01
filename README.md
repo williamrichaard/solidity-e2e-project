@@ -1,7 +1,7 @@
 # Ethereum Blockchain Overview
 
 ## Introduction
-This document provides a comprehensive overview of how the Ethereum blockchain works, including key concepts such as decentralization, mining, and the GHOST protocol. The goal is to offer a clear and structured explanation of Ethereum's core principles, using markdown formatting, images, and videos to enhance readability and understanding.
+This document provides a comprehensive overview of how the Ethereum blockchain works, including key concepts such as decentralization, mining, and the GHOST protocol. The goal is to offer a clear and structured explanation of Ethereum's core principles, using markdown formatting, images, and video links to enhance readability and understanding.
 
 ---
 
@@ -21,6 +21,7 @@ This document provides a comprehensive overview of how the Ethereum blockchain w
     - [Ether](#ether)
     - [Single Chain](#single-chain)
     - [GHOST Protocol](#ghost-protocol)
+  - [Smart Contracts](#smart-contracts)
   - [Visual Representation](#visual-representation)
   - [Additional Resources](#additional-resources)
   - [Conclusion](#conclusion)
@@ -95,6 +96,15 @@ The **GHOST protocol** (Greedy Heaviest Observed Subtree) is used to ensure that
 
 ---
 
+## Smart Contracts
+**Smart contracts** are one of the key features that differentiate Ethereum from other blockchains. They are self-executing programs that run on the blockchain and automatically perform actions when certain conditions are met.
+
+- **Key Point:** Smart contracts enable the creation of decentralized applications (dApps) that can operate without the need for intermediaries.
+
+For a more detailed explanation of smart contracts, check out this [video on Smart Contracts](https://www.youtube.com/watch?v=ZE2HxTmxfrI).
+
+---
+
 ## Visual Representation
 Here is a visual representation of how the Ethereum blockchain works:
 
@@ -108,8 +118,10 @@ Here is a visual representation of how the Ethereum blockchain works:
 - [Ethereum Whitepaper](https://ethereum.org/en/whitepaper/)
 - [Blockchain Explained](https://www.youtube.com/watch?v=SSo_EIwHSd4)
 - [Proof of Work vs Proof of Stake](https://www.youtube.com/watch?v=M3EFi_POhps)
+- [Smart Contracts Explained](https://www.youtube.com/watch?v=ZE2HxTmxfrI)
 
 ---
 
 ## Conclusion
-Ethereum is a powerful decentralized platform that enables peer-to-peer transactions and the execution of smart contracts. Its blockchain is secure, transparent, and immutable, making it a revolutionary technology in the world of finance and beyond. By understanding the key concepts such as mining, proof of work, and the GHOST protocol, you can gain a deeper appreciation for how Ethereum operates and why it is considered one of the most important blockchain platforms today.
+Ethereum is a powerful decentralized platform that enables peer-to-peer transactions and the execution of smart contracts. Its blockchain is secure, transparent, and immutable, making it a revolutionary technology in the world of finance and beyond. By understanding the key concepts such as mining, proof of work, smart contracts, and the GHOST protocol, you can gain a deeper appreciation for how Ethereum operates and why it is considered one of the most important blockchain platforms today.
+
