@@ -1,32 +1,47 @@
 const MyToken = artifacts.require("MyToken");
 
 contract("MyToken", (accounts) => {
-  const [owner, user1, user2] = accounts;
+    const owner = accounts[0];
+    const user1 = accounts[1];
 
-  it("should mint a new NFT", async () => {
-    const instance = await MyToken.new(owner);
-    await instance.mintNFT(user1, { from: owner });
-    const ownerOfToken = await instance.getOwner(0);
-    assert.equal(ownerOfToken, user1, "The owner of the token should be user1");
-  });
+    let myTokenInstance;
 
-  it("should transfer ownership of the contract", async () => {
-    const instance = await MyToken.new(owner);
-    await instance.transferOwnership(user2, { from: owner });
-    const newOwner = await instance.owner();
-    assert.equal(newOwner, user2, "The new owner should be user2");
-  });
+    beforeEach(async () => {
+        myTokenInstance = await MyToken.new(owner);
+    });
 
-  it("should not allow unauthorized users to mint NFTs", async () => {
-    const instance = await MyToken.new(owner);
-    try {
-      await instance.mintNFT(user1, { from: user1 });
-      assert.fail("Unauthorized user was able to mint an NFT");
-    } catch (error) {
-      assert(
-        error.message.includes("Caller is not authorized"),
-        "Expected 'Caller is not authorized' error"
-      );
-    }
-  });
+    it("should deploy the contract and set the correct owner", async () => {
+        const contractOwner = await myTokenInstance.owner();
+        assert.equal(contractOwner, owner, "Owner is not set correctly");
+    });
+
+    it("should mint a new NFT and assign it to the correct owner", async () => {
+        await myTokenInstance.mintNFT(user1, { from: owner });
+        const tokenOwner = await myTokenInstance.getOwner(0);
+        assert.equal(tokenOwner, user1, "Token owner is not set correctly");
+    });
+
+    it("should not allow non-owners to mint NFTs", async () => {
+        try {
+            await myTokenInstance.mintNFT(user1, { from: user1 });
+            assert.fail("Non-owner was able to mint an NFT");
+        } catch (error) {
+            assert(error.message.includes("Caller is not the owner"), "Expected onlyOwner modifier to fail");
+        }
+    });
+
+    it("should transfer ownership of the contract", async () => {
+        await myTokenInstance.transferOwnership(user1, { from: owner });
+        const newOwner = await myTokenInstance.owner();
+        assert.equal(newOwner, user1, "Ownership was not transferred correctly");
+    });
+
+    it("should not allow non-owners to transfer ownership", async () => {
+        try {
+            await myTokenInstance.transferOwnership(user1, { from: user1 });
+            assert.fail("Non-owner was able to transfer ownership");
+        } catch (error) {
+            assert(error.message.includes("Caller is not the owner"), "Expected onlyOwner modifier to fail");
+        }
+    });
 });
