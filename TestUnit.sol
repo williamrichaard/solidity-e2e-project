@@ -80,4 +80,14 @@ contract("MyToken", (accounts) => {
             expect(error.message).to.include("Cannot mint to the zero address");
         }
     });
+
+    it("should not allow minting of already minted tokens", async () => {
+        await myTokenInstance.mintNFT(user1, { from: owner });
+        try {
+            await myTokenInstance.mintNFT(user1, { from: owner });
+            expect.fail("Token was minted twice");
+        } catch (error) {
+            expect(error.message).to.include("Token already minted");
+        }
+    });
 });
