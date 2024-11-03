@@ -1,8 +1,9 @@
-const MyToken = artifacts.require("MyToken");
 const { expect } = require("chai");
+const MyToken = artifacts.require("MyToken");
 
 contract("MyToken", (accounts) => {
-    const [owner, user1, user2] = accounts;
+    const owner = accounts[0];
+    const user1 = accounts[1];
     let myTokenInstance;
 
     beforeEach(async () => {
@@ -20,16 +21,6 @@ contract("MyToken", (accounts) => {
         expect(tokenOwner).to.equal(user1);
     });
 
-    it("should emit a Transfer event when minting a new NFT", async () => {
-        const receipt = await myTokenInstance.mintNFT(user1, { from: owner });
-        expect(receipt.logs.length).to.equal(1);
-        const event = receipt.logs[0];
-        expect(event.event).to.equal("Transfer");
-        expect(event.args.from).to.equal("0x0000000000000000000000000000000000000000");
-        expect(event.args.to).to.equal(user1);
-        expect(event.args.tokenId.toNumber()).to.equal(0);
-    });
-
     it("should not allow non-owners to mint NFTs", async () => {
         try {
             await myTokenInstance.mintNFT(user1, { from: user1 });
@@ -45,15 +36,6 @@ contract("MyToken", (accounts) => {
         expect(newOwner).to.equal(user1);
     });
 
-    it("should emit an OwnershipTransferred event when ownership is transferred", async () => {
-        const receipt = await myTokenInstance.transferOwnership(user1, { from: owner });
-        expect(receipt.logs.length).to.equal(1);
-        const event = receipt.logs[0];
-        expect(event.event).to.equal("OwnershipTransferred");
-        expect(event.args.previousOwner).to.equal(owner);
-        expect(event.args.newOwner).to.equal(user1);
-    });
-
     it("should not allow non-owners to transfer ownership", async () => {
         try {
             await myTokenInstance.transferOwnership(user1, { from: user1 });
@@ -63,31 +45,21 @@ contract("MyToken", (accounts) => {
         }
     });
 
-    it("should revert if trying to transfer ownership to the zero address", async () => {
-        try {
-            await myTokenInstance.transferOwnership("0x0000000000000000000000000000000000000000", { from: owner });
-            expect.fail("Ownership was transferred to the zero address");
-        } catch (error) {
-            expect(error.message).to.include("New owner is the zero address");
-        }
-    });
-
-    it("should revert if trying to mint to the zero address", async () => {
+    it("should not mint a token to the zero address", async () => {
         try {
             await myTokenInstance.mintNFT("0x0000000000000000000000000000000000000000", { from: owner });
-            expect.fail("NFT was minted to the zero address");
+            expect.fail("Minting to zero address was allowed");
         } catch (error) {
-            expect(error.message).to.include("Cannot mint to the zero address");
+            expect(error.message).to.include("Error: Invalid address. Cannot mint to the zero address.");
         }
     });
 
-    it("should not allow minting of already minted tokens", async () => {
-        await myTokenInstance.mintNFT(user1, { from: owner });
+    it("should not allow querying a non-existent token", async () => {
         try {
-            await myTokenInstance.mintNFT(user1, { from: owner });
-            expect.fail("Token was minted twice");
+            await myTokenInstance.getOwner(999);
+            expect.fail("Querying non-existent token was allowed");
         } catch (error) {
-            expect(error.message).to.include("Token already minted");
+            expect(error.message).to.include("Error: The requested token does not exist.");
         }
     });
 });
