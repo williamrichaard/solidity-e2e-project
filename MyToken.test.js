@@ -4,6 +4,7 @@ contract("MyToken", (accounts) => {
   let myTokenInstance;
   const owner = accounts[0]; // Contract owner
   const nonOwner = accounts[1]; // Non-owner account
+  const anotherAccount = accounts[2]; // Another account
   const zeroAddress = "0x0000000000000000000000000000000000000000"; // Zero address
 
   // Before each test, deploy a new instance of the contract
@@ -107,5 +108,71 @@ contract("MyToken", (accounts) => {
   it("should return false if the address does not own the token", async () => {
     const isOwner = await myTokenInstance.isOwnerOf(nonOwner, 0);
     assert.equal(isOwner, false, "The address should not own the token");
+  });
+
+  // Test minting a token that has already been minted
+  it("should fail to mint a token that has already been minted", async () => {
+    await myTokenInstance.mintNFT(nonOwner, { from: owner });
+    try {
+      await myTokenInstance.mintNFT(nonOwner, { from: owner });
+      assert.fail("Minting an already minted token should fail");
+    } catch (error) {
+      assert(error.message.includes("Error: Token has already been minted"), "Expected token already minted error");
+    }
+  });
+
+  // Test transferring a token to another account
+  it("should transfer a token to another account", async () => {
+    await myTokenInstance.mintNFT(nonOwner, { from: owner });
+    const tokenId = 0;
+
+    // Transfer the token from nonOwner to anotherAccount
+    await myTokenInstance.transferOwnership(anotherAccount, { from: nonOwner });
+
+    // Check that the token is now owned by anotherAccount
+    const ownerOfToken = await myTokenInstance.getOwner(tokenId);
+    assert.equal(ownerOfToken, anotherAccount, "The token should be transferred to the new owner");
+  });
+
+  // Test transferring a token that does not exist
+  it("should fail to transfer a token that does not exist", async () => {
+    try {
+      await myTokenInstance.transferOwnership(anotherAccount, { from: nonOwner });
+      assert.fail("Transferring a non-existent token should fail");
+    } catch (error) {
+      assert(error.message.includes("Error: The requested token does not exist"), "Expected token does not exist error");
+    }
+  });
+
+  // Test minting tokens after ownership transfer
+  it("should allow the new owner to mint tokens after ownership transfer", async () => {
+    const newOwner = accounts[2];
+    await myTokenInstance.transferOwnership(newOwner, { from: owner });
+
+    // New owner mints a token
+    const receipt = await myTokenInstance.mintNFT(nonOwner, { from: newOwner });
+    const tokenId = 0;
+
+    // Check that the Transfer event was emitted
+    assert.equal(receipt.logs[0].event, "Transfer", "Transfer event should be emitted");
+    assert.equal(receipt.logs[0].args.to, nonOwner, "Token should be minted to the correct address");
+    assert.equal(receipt.logs[0].args.tokenId.toNumber(), tokenId, "Token ID should be correct");
+
+    // Check that the token exists and is owned by the correct address
+    const ownerOfToken = await myTokenInstance.getOwner(tokenId);
+    assert.equal(ownerOfToken, nonOwner, "The owner of the token should be the correct address");
+  });
+
+  // Test that the original owner cannot mint tokens after ownership transfer
+  it("should not allow the original owner to mint tokens after ownership transfer", async () => {
+    const newOwner = accounts[2];
+    await myTokenInstance.transferOwnership(newOwner, { from: owner });
+
+    try {
+      await myTokenInstance.mintNFT(nonOwner, { from: owner });
+      assert.fail("Original owner should not be able to mint tokens after ownership transfer");
+    } catch (error) {
+      assert(error.message.includes("Caller is not the owner"), "Expected onlyOwner error");
+    }
   });
 });
