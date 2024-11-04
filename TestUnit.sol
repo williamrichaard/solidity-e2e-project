@@ -2,76 +2,71 @@
 const MyToken = artifacts.require("MyToken");
 
 contract("MyToken", (accounts) => {
-  const [owner, newOwner, user1, user2] = accounts;
+    let myTokenInstance;
+    const owner = accounts[0];
+    const nonOwner = accounts[1];
+    const zeroAddress = "0x0000000000000000000000000000000000000000";
 
-  let myTokenInstance;
+    beforeEach(async () => {
+        myTokenInstance = await MyToken.new({ from: owner });
+    });
 
-  beforeEach(async () => {
-    myTokenInstance = await MyToken.new(owner);
-  });
+    it("should mint a new token to a valid address", async () => {
+        const receipt = await myTokenInstance.mintNFT(nonOwner, { from: owner });
+        const tokenId = 0;
 
-  it("should initialize the contract with the correct owner", async () => {
-    const contractOwner = await myTokenInstance.owner();
-    assert.equal(contractOwner, owner, "Owner is not set correctly");
-  });
+        // Check that the event was emitted
+        assert.equal(receipt.logs[0].event, "TokenMinted", "TokenMinted event should be emitted");
+        assert.equal(receipt.logs[0].args.to, nonOwner, "Token should be minted to the correct address");
+        assert.equal(receipt.logs[0].args.tokenId.toNumber(), tokenId, "Token ID should be correct");
 
-  it("should allow the owner to mint a new NFT", async () => {
-    await myTokenInstance.mintNFT(user1, { from: owner });
-    const tokenOwner = await myTokenInstance.getOwner(0);
-    assert.equal(tokenOwner, user1, "Token was not minted correctly");
-  });
+        // Check that the token exists
+        const ownerOfToken = await myTokenInstance.ownerOf(tokenId);
+        assert.equal(ownerOfToken, nonOwner, "The owner of the token should be the correct address");
+    });
 
-  it("should not allow non-owners to mint NFTs", async () => {
-    try {
-      await myTokenInstance.mintNFT(user1, { from: user2 });
-      assert.fail("Non-owner was able to mint an NFT");
-    } catch (error) {
-      assert(
-        error.message.includes("Caller is not the owner"),
-        "Expected onlyOwner modifier to prevent minting"
-      );
-    }
-  });
+    it("should fail to mint a token to the zero address", async () => {
+        try {
+            await myTokenInstance.mintNFT(zeroAddress, { from: owner });
+            assert.fail("Minting to the zero address should fail");
+        } catch (error) {
+            assert(error.message.includes("Error: Invalid address"), "Expected invalid address error");
+        }
+    });
 
-  it("should allow the owner to transfer ownership", async () => {
-    await myTokenInstance.transferOwnership(newOwner, { from: owner });
-    const contractOwner = await myTokenInstance.owner();
-    assert.equal(contractOwner, newOwner, "Ownership was not transferred correctly");
-  });
+    it("should only allow the owner to mint tokens", async () => {
+        try {
+            await myTokenInstance.mintNFT(nonOwner, { from: nonOwner });
+            assert.fail("Non-owner should not be able to mint tokens");
+        } catch (error) {
+            assert(error.message.includes("Ownable: caller is not the owner"), "Expected onlyOwner error");
+        }
+    });
 
-  it("should not allow non-owners to transfer ownership", async () => {
-    try {
-      await myTokenInstance.transferOwnership(newOwner, { from: user1 });
-      assert.fail("Non-owner was able to transfer ownership");
-    } catch (error) {
-      assert(
-        error.message.includes("Caller is not the owner"),
-        "Expected onlyOwner modifier to prevent ownership transfer"
-      );
-    }
-  });
+    it("should transfer ownership to a valid address", async () => {
+        const newOwner = accounts[2];
+        await myTokenInstance.transferOwnership(newOwner, { from: owner });
 
-  it("should not allow minting to the zero address", async () => {
-    try {
-      await myTokenInstance.mintNFT("0x0000000000000000000000000000000000000000", { from: owner });
-      assert.fail("Minting to zero address was allowed");
-    } catch (error) {
-      assert(
-        error.message.includes("Cannot mint to the zero address"),
-        "Expected minting to zero address to fail"
-      );
-    }
-  });
+        const currentOwner = await myTokenInstance.getOwner();
+        assert.equal(currentOwner, newOwner, "Ownership should be transferred to the new owner");
+    });
 
-  it("should not allow querying ownership of non-existent tokens", async () => {
-    try {
-      await myTokenInstance.getOwner(999);
-      assert.fail("Querying non-existent token did not fail");
-    } catch (error) {
-      assert(
-        error.message.includes("The requested token does not exist"),
-        "Expected querying non-existent token to fail"
-      );
-    }
-  });
+    it("should fail to transfer ownership to the zero address", async () => {
+        try {
+            await myTokenInstance.transferOwnership(zeroAddress, { from: owner });
+            assert.fail("Transferring ownership to the zero address should fail");
+        } catch (error) {
+            assert(error.message.includes("Error: New owner is the zero address"), "Expected zero address error");
+        }
+    });
+
+    it("should only allow the owner to transfer ownership", async () => {
+        const newOwner = accounts[2];
+        try {
+            await myTokenInstance.transferOwnership(newOwner, { from: nonOwner });
+            assert.fail("Non-owner should not be able to transfer ownership");
+        } catch (error) {
+            assert(error.message.includes("Ownable: caller is not the owner"), "Expected onlyOwner error");
+        }
+    });
 });
