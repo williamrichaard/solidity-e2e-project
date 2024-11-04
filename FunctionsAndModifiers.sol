@@ -34,6 +34,9 @@ contract MyToken {
         address indexed newOwner
     );
 
+    // Event to emit when a token is minted
+    event TokenMinted(address indexed to, uint256 indexed tokenId);
+
     /// @notice Constructor to initialize the contract with an initial owner
     /// @param initialOwner The address of the initial owner of the contract
     constructor(address initialOwner) {
@@ -84,9 +87,46 @@ contract MyToken {
 
         // Emit the transfer event (from address(0) to indicate minting)
         emit Transfer(address(0), to, newTokenId);
+        emit TokenMinted(to, newTokenId);
 
         // Increment the token ID counter for the next mint
         _tokenIdCounter += 1;
+    }
+
+    /// @notice Function to mint multiple NFTs at once
+    /// @dev Only the owner of the contract can mint multiple tokens
+    /// @param to The address to which the new tokens will be minted
+    /// @param numberOfTokens The number of tokens to mint
+    function mintMultiple(address to, uint256 numberOfTokens) public onlyOwner {
+        require(
+            to != address(0),
+            "Error: Invalid address. Cannot mint to the zero address."
+        );
+        uint256 tokenId = _tokenIdCounter;
+
+        for (uint256 i = 0; i < numberOfTokens; i++) {
+            // Ensure the token has not been minted before
+            require(
+                !_mintedTokens[tokenId],
+                "Error: Token has already been minted."
+            );
+
+            // Assign ownership of the token to the 'to' address
+            _owners[tokenId] = to;
+
+            // Mark the token as minted
+            _mintedTokens[tokenId] = true;
+
+            // Emit the transfer event (from address(0) to indicate minting)
+            emit Transfer(address(0), to, tokenId);
+            emit TokenMinted(to, tokenId);
+
+            // Increment the token ID for the next mint
+            tokenId++;
+        }
+
+        // Update the token ID counter
+        _tokenIdCounter = tokenId;
     }
 
     /// @notice Function to get the owner of a specific token ID
@@ -98,6 +138,17 @@ contract MyToken {
             "Error: The requested token does not exist."
         );
         return _owners[tokenId];
+    }
+
+    /// @notice Function to check if an address is the owner of a specific token
+    /// @param account The address to check
+    /// @param tokenId The ID of the token to check
+    /// @return True if the account is the owner of the token, false otherwise
+    function isOwnerOf(
+        address account,
+        uint256 tokenId
+    ) public view returns (bool) {
+        return _owners[tokenId] == account;
     }
 
     /// @notice Internal function to check if a token exists
