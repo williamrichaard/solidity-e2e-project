@@ -15,13 +15,13 @@ contract("MyToken", (accounts) => {
     it("should mint a new token to a valid address", async () => {
         const receipt = await myTokenInstance.mintNFT(nonOwner, { from: owner });
         const tokenId = 0;
-
-        // Check that the Transfer event was emitted
+        
+        // Verificar se o evento Transfer foi emitido
         assert.equal(receipt.logs[0].event, "Transfer", "Transfer event should be emitted");
         assert.equal(receipt.logs[0].args.to, nonOwner, "Token should be minted to the correct address");
         assert.equal(receipt.logs[0].args.tokenId.toNumber(), tokenId, "Token ID should be correct");
-
-        // Check that the token exists and is owned by the correct address
+        
+        // Verificar se o token existe e pertence ao endereço correto
         const ownerOfToken = await myTokenInstance.getOwner(tokenId);
         assert.equal(ownerOfToken, nonOwner, "The owner of the token should be the correct address");
     });

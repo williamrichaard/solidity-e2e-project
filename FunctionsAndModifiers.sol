@@ -39,7 +39,7 @@ contract MyToken {
 
     /// @notice Constructor to initialize the contract with an initial owner
     /// @param initialOwner The address of the initial owner of the contract
-    constructor(address initialOwner) {
+    constructor(address initialOwner) public {
         require(
             initialOwner != address(0),
             "Error: Invalid initial owner address."
