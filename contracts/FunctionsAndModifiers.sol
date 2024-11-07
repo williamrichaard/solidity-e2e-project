@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.21;
 
-/// @title MyToken - A simple ERC-721-like NFT contract
-/// @notice This contract mimics the basic functionality of ERC-721 tokens,
-/// including minting and ownership management.
-contract MyToken {
-    string public name = "MyToken";
-    string public symbol = "MTK";
+/// @title ERC721Token - A basic ERC-721-like NFT contract
+/// @notice This contract allows minting, transferring, and ownership management of NFTs.
+contract ERC721Token {
+    string public name = "ERC721Token";
+    string public symbol = "E721";
     uint256 private _tokenIdCounter;
+    uint256 public maxSupply = 10000; // Maximum supply for the NFTs
     address private _owner;
 
     // Mapping to track ownership of tokens
@@ -17,22 +17,18 @@ contract MyToken {
     // Authorized minters (initially the owner)
     mapping(address => bool) private _authorizedMinters;
 
-    // Event emitted when a token is transferred or minted
+    // Events
     event Transfer(
         address indexed from,
         address indexed to,
         uint256 indexed tokenId
     );
-    // Event emitted when ownership of the contract changes
     event OwnershipTransferred(
         address indexed previousOwner,
         address indexed newOwner
     );
-    // Event emitted when a new token is minted
     event TokenMinted(address indexed to, uint256 indexed tokenId);
-    // Event emitted when a new minter is authorized
     event MinterAuthorized(address indexed minter);
-    // Event emitted when a minter is revoked
     event MinterRevoked(address indexed minter);
 
     /// @notice Constructor to initialize the contract and set the initial owner
@@ -76,7 +72,6 @@ contract MyToken {
             !_authorizedMinters[minter],
             "Address is already an authorized minter"
         );
-
         _authorizedMinters[minter] = true;
         emit MinterAuthorized(minter);
     }
@@ -88,7 +83,6 @@ contract MyToken {
             _authorizedMinters[minter],
             "Address is not an authorized minter"
         );
-
         _authorizedMinters[minter] = false;
         emit MinterRevoked(minter);
     }
@@ -97,6 +91,7 @@ contract MyToken {
     /// @param to The address to mint the token to
     function mintNFT(address to) public onlyAuthorized {
         require(to != address(0), "Cannot mint to the zero address");
+        require(_tokenIdCounter < maxSupply, "Max supply reached");
 
         uint256 newTokenId = _tokenIdCounter;
 
@@ -121,17 +116,6 @@ contract MyToken {
     function getOwner(uint256 tokenId) public view returns (address) {
         require(_mintedTokens[tokenId], "Token does not exist");
         return _owners[tokenId];
-    }
-
-    /// @notice Check if an address is the owner of a specific token
-    /// @param account The address to check
-    /// @param tokenId The ID of the token
-    /// @return True if the address is the owner, false otherwise
-    function isOwnerOf(
-        address account,
-        uint256 tokenId
-    ) public view returns (bool) {
-        return _owners[tokenId] == account;
     }
 
     /// @notice Get the current owner of the contract
