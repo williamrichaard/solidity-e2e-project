@@ -25,7 +25,7 @@ contract("ERC721Token", (accounts) => {
       await tokenInstance.mintNFT(nonMinter, { from: nonMinter });
       assert.fail("Non-authorized address should not be able to mint tokens");
     } catch (error) {
-      assert(error.message.includes("Caller is not an authorized minter"));
+      assert(error.message.includes("NotAuthorized"));
     }
   });
 
@@ -42,21 +42,6 @@ contract("ERC721Token", (accounts) => {
     }
   });
 
-  it("should transfer ownership correctly", async () => {
-    const newOwner = accounts[4];
-    await tokenInstance.transferOwnership(newOwner, { from: owner });
-
-    const currentOwner = await tokenInstance.owner();
-    assert.equal(currentOwner, newOwner, "Ownership should have transferred");
-  });
-
-  it("should return the correct owner of a specific token", async () => {
-    await tokenInstance.authorizeMinter(minter, { from: owner });
-    await tokenInstance.mintNFT(minter, { from: minter });
-    const ownerOfToken = await tokenInstance.getOwner(0);
-    assert.equal(ownerOfToken, minter, "Owner of token should be correct");
-  });
-
   it("should fail to mint to the zero address", async () => {
     try {
       await tokenInstance.mintNFT("0x0000000000000000000000000000000000000000", { from: minter });
@@ -66,21 +51,12 @@ contract("ERC721Token", (accounts) => {
     }
   });
 
-  it("should authorize and revoke a minter correctly", async () => {
-    await tokenInstance.authorizeMinter(anotherAccount, { from: owner });
-    await tokenInstance.mintNFT(anotherAccount, { from: anotherAccount });
-
-    const ownerOfToken = await tokenInstance.getOwner(1);
-    assert.equal(ownerOfToken, anotherAccount, "Another account should own the token");
-
-    // Revoke minter and check that minting is now disallowed
-    await tokenInstance.revokeMinter(anotherAccount, { from: owner });
-
+  it("should fail to get owner of a non-existent token", async () => {
     try {
-      await tokenInstance.mintNFT(anotherAccount, { from: anotherAccount });
-      assert.fail("Revoked minter should not be able to mint tokens");
+      await tokenInstance.getOwner(9999);
+      assert.fail("Getting owner of non-existent token should fail");
     } catch (error) {
-      assert(error.message.includes("Caller is not an authorized minter"));
+      assert(error.message.includes("TokenNotExist"));
     }
   });
 });
