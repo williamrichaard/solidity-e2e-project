@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.21;
 
-/// @title ERC721Token - A basic ERC-721-like NFT contract
-/// @notice This contract allows minting, transferring, and ownership management of NFTs.
+/// @title ERC721Token - A basic ERC-721-like NFT contract with error handling
+/// @notice This contract allows minting, transferring, and ownership management of NFTs with improved error handling.
 contract ERC721Token {
     string public name = "ERC721Token";
     string public symbol = "E721";
@@ -31,6 +31,12 @@ contract ERC721Token {
     event MinterAuthorized(address indexed minter);
     event MinterRevoked(address indexed minter);
 
+    // Custom Errors
+    error NotAuthorized(address caller);
+    error ZeroAddressNotAllowed();
+    error MaxSupplyReached();
+    error TokenNotExist(uint256 tokenId);
+
     /// @notice Constructor to initialize the contract and set the initial owner
     /// @param initialOwner The address of the initial contract owner
     constructor(address initialOwner) {
@@ -49,10 +55,9 @@ contract ERC721Token {
 
     // Modifier to ensure the caller is an authorized minter
     modifier onlyAuthorized() {
-        require(
-            _authorizedMinters[msg.sender],
-            "Caller is not an authorized minter"
-        );
+        if (!_authorizedMinters[msg.sender]) {
+            revert NotAuthorized(msg.sender);
+        }
         _;
     }
 
@@ -114,7 +119,9 @@ contract ERC721Token {
     /// @param tokenId The ID of the token
     /// @return The address of the owner
     function getOwner(uint256 tokenId) public view returns (address) {
-        require(_mintedTokens[tokenId], "Token does not exist");
+        if (!_mintedTokens[tokenId]) {
+            revert TokenNotExist(tokenId);
+        }
         return _owners[tokenId];
     }
 
